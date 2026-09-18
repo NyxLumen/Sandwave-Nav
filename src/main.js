@@ -20,4 +20,18 @@ if (nav.opts.prewarm) {
 // Handy while experimenting.
 window.sandwaveNav = nav
 
+// Handle masthead color transition when scrolling past hero.
+const masthead = document.querySelector('.masthead')
+const hero = document.querySelector('.hero')
+
+if (masthead && hero) {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      masthead.classList.toggle('is-scrolled', !entry.isIntersecting)
+    },
+    { threshold: 0.1 }
+  )
+  observer.observe(hero)
+}
+
 export default nav

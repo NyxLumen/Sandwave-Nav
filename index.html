@@ -9,6 +9,9 @@
       content="An experimental navigation transition: a wave of sand sweeping across the page."
     />
 
+    <!-- Preload desert image so it's loaded before WaveRenderer captures -->
+    <link rel="preload" as="image" href="/assets/sandwave-desert.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -49,18 +52,29 @@
 
       <main id="top">
         <section class="hero">
-          <p class="eyebrow">Studiø — Rotterdam</p>
-          <h1 class="hero__title">
-            <span class="hero__line">A navigation</span>
-            <span class="hero__line hero__line--indent">that moves</span>
-            <span class="hero__line"><em>like sand.</em></span>
-          </h1>
-          <div class="hero__meta">
-            <p class="lede">
-              We build interfaces that behave like material — things with weight, drag and a
-              memory of where they have been.
-            </p>
-            <p class="hero__scroll">Scroll <span aria-hidden="true">↓</span></p>
+          <!-- Desert background as a real image element so html2canvas captures it -->
+          <img
+            src="/assets/sandwave-desert.png"
+            alt=""
+            class="hero__bg"
+            aria-hidden="true"
+            loading="eager"
+          />
+
+          <div class="hero__content">
+            <p class="eyebrow">Studiø — Rotterdam</p>
+            <h1 class="hero__title">
+              <span class="hero__line">A navigation</span>
+              <span class="hero__line hero__line--indent">that moves</span>
+              <span class="hero__line"><em>like sand.</em></span>
+            </h1>
+            <div class="hero__meta">
+              <p class="lede">
+                We build interfaces that behave like material — things with weight, drag and a
+                memory of where they have been.
+              </p>
+              <p class="hero__scroll">Scroll <span aria-hidden="true">↓</span></p>
+            </div>
           </div>
         </section>
 

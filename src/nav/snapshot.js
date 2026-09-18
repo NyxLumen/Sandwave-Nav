@@ -43,6 +43,30 @@ export async function capturePage(element, opts) {
     // texture whose text does not line up with the live page.
     if (document.fonts?.ready) await document.fonts.ready
 
+    // Ensure background images are loaded before capture. The desert image is
+    // referenced via CSS (hero::before), so check all background-image URLs.
+    const bgImages = Array.from(document.querySelectorAll('*'))
+      .map((el) => {
+        const bg = getComputedStyle(el).backgroundImage
+        const match = bg?.match(/url\(['"]?([^'"]+)['"]?\)/)
+        return match ? match[1] : null
+      })
+      .filter(Boolean)
+
+    if (bgImages.length) {
+      await Promise.all(
+        bgImages.map(
+          (src) =>
+            new Promise((resolve) => {
+              const img = new Image()
+              img.onload = resolve
+              img.onerror = resolve // Don't fail the whole capture if one image fails
+              img.src = src
+            }),
+        ),
+      )
+    }
+
     const canvas = await html2canvas(element, {
       backgroundColor,
       scale,
