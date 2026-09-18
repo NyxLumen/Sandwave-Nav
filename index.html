@@ -59,15 +59,10 @@
 
       <main id="top">
         <section class="hero">
-          <!-- Hero image — canonical single instance, real <img> so html2canvas
-               captures it as the WaveRenderer page texture. Not state-dependent. -->
-          <img
-            src="/assets/dune-crfree.png"
-            alt=""
-            class="hero__bg"
-            aria-hidden="true"
-            loading="eager"
-          />
+          <!-- Hero background — real DOM element with CSS background-image so
+               html2canvas rasterizes the exact same cover scaling and center
+               alignment as the live browser window without stretching -->
+          <div class="hero__bg" aria-hidden="true"></div>
 
           <div class="hero__content">
             <p class="eyebrow">Studiø — Rotterdam</p>

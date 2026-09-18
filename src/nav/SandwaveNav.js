@@ -61,6 +61,7 @@ export class SandwaveNav {
 
     this.trigger = resolve(this.opts.trigger)
     this.page = resolve(this.opts.page)
+    this.veil = document.querySelector('.masthead__veil')
     this.items = opts.items ?? navItems
     this.social = opts.social ?? navSocial
     this.meta = opts.meta ?? navMeta
@@ -503,10 +504,16 @@ export class SandwaveNav {
 
   _showCanvas() {
     if (this.renderer?.canvas) this.renderer.canvas.style.display = 'block'
+    // Hide the live masthead veil while the WebGL canvas is displayed so the
+    // gradient/blur is not rendered twice (the canvas already contains it from
+    // the snapshot).
+    if (this.veil) this.veil.style.opacity = '0'
   }
 
   _hideCanvas() {
     if (this.renderer?.canvas) this.renderer.canvas.style.display = 'none'
+    // Restore the live masthead veil when the normal DOM becomes visible again.
+    if (this.veil) this.veil.style.opacity = ''
   }
 
   /**

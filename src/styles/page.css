@@ -126,6 +126,7 @@ a {
   mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
   z-index: -1;
   pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 
 .masthead.is-scrolled {
@@ -219,24 +220,27 @@ body.is-nav-open .nav-trigger {
   position: relative;
   /* Full viewport height from the very top of the window */
   min-height: 100vh;
-  /* Clears the fixed masthead and gives breathing room */
-  padding: clamp(90px, 15vh, 160px) var(--gutter) clamp(56px, 10vh, 120px);
+  /* Balanced padding so content fits inside 100vh without overflow stretching */
+  padding: clamp(80px, 12vh, 120px) var(--gutter) clamp(40px, 8vh, 80px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
 }
 
-/* Hero image — real <img> element, canonical single instance.
-   Positioned absolute, fills the entire hero from (0,0) of the viewport.
-   z-index 0: sits behind the content, inside the hero's stacking context. */
+/* Hero background — real DOM element with CSS background-image.
+   html2canvas fully implements background-size: cover and background-position:
+   center, rendering the exact same pixel-for-pixel scale, aspect ratio, and
+   center crop as the live browser. */
 .hero__bg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  background-image: url('/assets/dune-crfree.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   z-index: 0;
 }
 
