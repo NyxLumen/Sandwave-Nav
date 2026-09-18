@@ -9,8 +9,8 @@
       content="An experimental navigation transition: a wave of sand sweeping across the page."
     />
 
-    <!-- Preload desert image so it's loaded before WaveRenderer captures -->
-    <link rel="preload" as="image" href="/assets/sandwave-desert.png" />
+    <!-- Preload hero image so it's loaded before WaveRenderer captures -->
+    <link rel="preload" as="image" href="/assets/dune-crfree.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,6 +28,13 @@
     -->
     <div id="page">
       <header class="masthead">
+        <!--
+          Real DOM veil element rather than ::before/::after pseudo-element.
+          html2canvas ignores generated content, so the gradient and blur must
+          live in an actual node to be captured by WaveRenderer's snapshot.
+        -->
+        <div class="masthead__veil" aria-hidden="true"></div>
+
         <a class="wordmark" href="#top">
           <span class="wordmark__mark" aria-hidden="true"></span>
           Sandwave
@@ -52,9 +59,10 @@
 
       <main id="top">
         <section class="hero">
-          <!-- Desert background as a real image element so html2canvas captures it -->
+          <!-- Hero image — canonical single instance, real <img> so html2canvas
+               captures it as the WaveRenderer page texture. Not state-dependent. -->
           <img
-            src="/assets/sandwave-desert.png"
+            src="/assets/dune-crfree.png"
             alt=""
             class="hero__bg"
             aria-hidden="true"

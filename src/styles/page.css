@@ -55,13 +55,13 @@ a {
 #page {
   position: relative;
   min-height: 100vh;
-  /* Clears the fixed masthead. */
-  padding-top: 80px;
-  /* No background here — the hero section carries the desert image, and
-     the sections below carry their own paper backgrounds. Setting a
-     background on #page would paint over the hero desert via the stacking
-     context, because a child's negative z-index goes behind its own
-     ancestor's background paint, not below the ancestor entirely. */
+  /* No padding-top: the hero fills the full viewport including behind the
+     fixed masthead. The masthead floats over it. Sections below the hero
+     have their own backgrounds (see .statement, .work, .footer). */
+  /* No background here — the hero carries the image; below-hero sections
+     carry their own paper. A background on #page would paint over the hero
+     via stacking-context rules (child negative z-index goes behind ancestor
+     background paint, not below the ancestor itself). */
   background: transparent;
 }
 
@@ -77,15 +77,16 @@ a {
 
 /* --- masthead -------------------------------------------------------------- */
 
-/* Fixed rather than sticky: html2canvas does not implement sticky, and would
-   drop the masthead out of the snapshot once the page is scrolled.
+/* Fixed rather than sticky: html2canvas does not implement sticky.
 
-   z-index is above the wave canvas (30) and the nav layer (40) on purpose.
-   A z-index on a positioned element creates a stacking context, so the
-   trigger's own z-index is scoped *inside* this one — lifting the masthead is
-   the only way to keep the close button above the wave.
+   z-index 60: above canvas (30) and nav layer (40). A positioned element with
+   z-index creates a stacking context, so the trigger's z-index is scoped
+   inside this one — this is the only way to keep the close button above
+   the wave canvas.
 
-   Light text over the desert hero, dark text over the rest of the page. */
+   No background: the masthead__veil real-DOM element carries the gradient
+   and blur so html2canvas captures it. ::before/::after pseudo-elements are
+   not captured by html2canvas, so essential visual layers must be real nodes. */
 .masthead {
   position: fixed;
   top: 0;
@@ -98,10 +99,35 @@ a {
   gap: 16px;
   padding: 18px var(--gutter);
   color: #f1ebe2;
-  transition: color 0.3s ease;
+  background: transparent;
 }
 
-/* Dark text for masthead once scrolled past the hero */
+/* Real DOM element: top-edge atmospheric gradient + subtle blur.
+   Covers from top of viewport down ~180px, black → transparent.
+   Must be a real element (not ::before) so html2canvas captures it. */
+.masthead__veil {
+  position: absolute;
+  inset: 0;
+  /* Extend 180px below the masthead's own 62px height */
+  height: 180px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.52) 0%,
+    rgba(0, 0, 0, 0.30) 35%,
+    rgba(0, 0, 0, 0.10) 65%,
+    rgba(0, 0, 0, 0)    100%
+  );
+  /* Blur only within this element — disappears as the gradient fades.
+     No border, no card, no visible rectangle. */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  /* Mask so the blur fades out with the gradient rather than cutting off */
+  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
 .masthead.is-scrolled {
   color: var(--ink);
 }
@@ -191,18 +217,19 @@ body.is-nav-open .nav-trigger {
 
 .hero {
   position: relative;
+  /* Full viewport height from the very top of the window */
   min-height: 100vh;
-  padding: clamp(48px, 12vh, 140px) var(--gutter) clamp(56px, 10vh, 120px);
+  /* Clears the fixed masthead and gives breathing room */
+  padding: clamp(90px, 15vh, 160px) var(--gutter) clamp(56px, 10vh, 120px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
 }
 
-/* Desert background as a real <img> element so html2canvas captures it.
-   Positioned absolutely, fills the hero, behind the content layer.
-   z-index: 0 so it stays within the hero's stacking context without going
-   behind ancestor backgrounds. The overlay and content sit above it. */
+/* Hero image — real <img> element, canonical single instance.
+   Positioned absolute, fills the entire hero from (0,0) of the viewport.
+   z-index 0: sits behind the content, inside the hero's stacking context. */
 .hero__bg {
   position: absolute;
   inset: 0;
@@ -220,10 +247,10 @@ body.is-nav-open .nav-trigger {
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(11, 10, 9, 0.45) 0%,
-    rgba(11, 10, 9, 0.25) 40%,
-    rgba(11, 10, 9, 0.15) 70%,
-    rgba(11, 10, 9, 0) 100%
+    rgba(11, 10, 9, 0.35) 0%,
+    rgba(11, 10, 9, 0.18) 40%,
+    rgba(11, 10, 9, 0.08) 70%,
+    rgba(11, 10, 9, 0)    100%
   );
   z-index: 1;
 }
