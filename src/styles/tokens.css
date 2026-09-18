@@ -1,0 +1,38 @@
+/* ---------------------------------------------------------------------------
+   Design tokens.
+
+   NOTE: anything that ends up inside the rasterised snapshot (i.e. everything
+   under #page) must use plain hex / rgb colours. html2canvas does not
+   understand oklch(), color-mix() or relative colour syntax, and silently
+   renders them as black. Keep modern colour syntax to the nav layer, which is
+   never rasterised.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* Paper — the site at rest */
+  --paper: #efeae3;
+  --paper-deep: #e4ddd4;
+  --ink: #16130f;
+  --ink-soft: #4a423a;
+  --muted: #8b8177;
+  --rule: #d3cabd;
+
+  /* Accent — warm sand */
+  --accent: #c4622d;
+
+  /* Night — the site under the wave */
+  --night: #0b0a09;
+  --night-ink: #f1ebe2;
+  --night-muted: #8d8378;
+  --night-accent: #d9764a;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Type */
+  --font-sans: 'Inter Tight', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
+
+  /* Layout */
+  --gutter: clamp(20px, 4.5vw, 64px);
+}

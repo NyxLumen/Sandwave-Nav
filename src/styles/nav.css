@@ -1,0 +1,205 @@
+/* ---------------------------------------------------------------------------
+   The navigation layer.
+
+   Deliberately has NO background of its own: the darkness under the nav is
+   produced by the wave shader, so the typography sits directly on the
+   transformed page. That is what makes it read as one material rather than a
+   panel sliding over a website.
+
+   This layer is never rasterised, so modern colour syntax is fine here.
+   --------------------------------------------------------------------------- */
+
+.sandwave-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(84px, 15vh, 150px) var(--gutter) clamp(28px, 6vh, 56px);
+  color: var(--night-ink);
+  /* Closed by default. */
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.sandwave-nav.is-open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* The reduced-motion / no-WebGL path needs to carry its own darkness, since
+   there is no shader to provide it. */
+.sandwave-nav.is-solid {
+  background: rgba(11, 10, 9, 0.965);
+}
+
+/* --- head ------------------------------------------------------------------ */
+
+.sandwave-nav__eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--night-muted);
+  margin-bottom: clamp(20px, 4vh, 44px);
+}
+
+/* --- the list -------------------------------------------------------------- */
+
+.sandwave-nav__list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(2px, 0.6vh, 8px);
+  margin-top: auto;
+}
+
+.sandwave-nav__item {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(14px, 2vw, 30px);
+  padding: clamp(2px, 0.5vh, 6px) 0;
+  color: var(--night-ink);
+  font-size: clamp(42px, 10.5vw, 148px);
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  transition: color 0.4s var(--ease-out-expo);
+}
+
+/* Mask used for the clip-reveal. Slight bottom padding keeps descenders from
+   being shaved by overflow:hidden. */
+.sandwave-nav__mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+.sandwave-nav__label {
+  display: block;
+  will-change: transform;
+}
+
+.sandwave-nav__index {
+  font-size: clamp(10px, 1vw, 13px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  color: var(--night-muted);
+  transition: color 0.4s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+}
+
+/* A hairline that draws in on hover, sitting in the gap after the label. */
+.sandwave-nav__rule {
+  align-self: center;
+  display: block;
+  width: clamp(24px, 5vw, 90px);
+  height: 1px;
+  background: var(--night-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.55s var(--ease-out-expo);
+}
+
+.sandwave-nav__item:hover,
+.sandwave-nav__item:focus-visible {
+  color: var(--night-accent);
+}
+
+.sandwave-nav__item:hover .sandwave-nav__index,
+.sandwave-nav__item:focus-visible .sandwave-nav__index {
+  color: var(--night-accent);
+}
+
+.sandwave-nav__item:hover .sandwave-nav__rule,
+.sandwave-nav__item:focus-visible .sandwave-nav__rule {
+  transform: scaleX(1);
+}
+
+.sandwave-nav__item:focus-visible {
+  outline: none;
+}
+
+/* Hover only makes sense with a pointer. */
+@media (hover: none) {
+  .sandwave-nav__rule {
+    display: none;
+  }
+}
+
+/* --- foot ------------------------------------------------------------------ */
+
+.sandwave-nav__foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: clamp(32px, 7vh, 80px);
+  padding-top: 18px;
+  border-top: 1px solid rgba(241, 235, 226, 0.14);
+}
+
+.sandwave-nav__social {
+  display: flex;
+  gap: 22px;
+}
+
+.sandwave-nav__social a {
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--night-muted);
+  transition: color 0.35s var(--ease-out-expo);
+}
+
+.sandwave-nav__social a:hover,
+.sandwave-nav__social a:focus-visible {
+  color: var(--night-ink);
+}
+
+.sandwave-nav__meta {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--night-muted);
+  text-align: right;
+}
+
+/* --- responsive ------------------------------------------------------------ */
+
+@media (max-width: 760px) {
+  .sandwave-nav {
+    padding-top: clamp(72px, 13vh, 110px);
+  }
+
+  .sandwave-nav__item {
+    font-size: clamp(36px, 13vw, 72px);
+    letter-spacing: -0.03em;
+  }
+
+  .sandwave-nav__foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .sandwave-nav__meta {
+    text-align: left;
+  }
+}
+
+/* Short viewports: keep the list from colliding with the foot. */
+@media (max-height: 560px) {
+  .sandwave-nav {
+    padding-top: 76px;
+  }
+
+  .sandwave-nav__item {
+    font-size: clamp(28px, 7vh, 56px);
+  }
+
+  .sandwave-nav__eyebrow {
+    margin-bottom: 16px;
+  }
+}
