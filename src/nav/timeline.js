@@ -133,6 +133,10 @@ export function buildWaveTimeline(state, targets) {
     0,
   )
   tl.set([targets.eyebrow, targets.foot], { opacity: 0, y: 12 }, 0)
+  if (targets.veil) {
+    tl.set(targets.veil, { opacity: 1 }, 0)
+    tl.to(targets.veil, { opacity: 0, duration: T.darkRamp, ease: 'power2.out' }, 0.04)
+  }
 
   // --- the wave ------------------------------------------------------------
   // Phase A: accelerate off the right edge.
@@ -200,6 +204,15 @@ export function buildWaveTimeline(state, targets) {
 export function buildReducedTimeline(targets) {
   const T = REDUCED_TIMING
   const tl = gsap.timeline({ paused: true })
+
+  if (targets.veil) {
+    tl.fromTo(
+      targets.veil,
+      { opacity: 1 },
+      { opacity: 0, duration: T.duration, ease: 'power2.out' },
+      0,
+    )
+  }
 
   tl.fromTo(
     targets.layer,

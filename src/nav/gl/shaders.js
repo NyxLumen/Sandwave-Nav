@@ -89,7 +89,7 @@ void main() {
   // --- wave front ----------------------------------------------------------
   // Travelling right -> left as uProgress goes 0 -> 1. The margins push the
   // front fully off both edges so the resting states are perfectly clean.
-  const float MARGIN = 0.14;
+  const float MARGIN = 0.08;
   float frontX = mix(1.0 + MARGIN, -MARGIN, uProgress) + crestOffset(vUv.y, uTime * 0.55);
 
   // Signed distance from the front. t > 0 is behind it (already swept).
