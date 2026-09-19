@@ -20,11 +20,11 @@
   color: var(--night-ink);
   /* Closed by default. */
   visibility: hidden;
+  opacity: 0;
   pointer-events: none;
 }
 
 .sandwave-nav.is-open {
-  visibility: visible;
   pointer-events: auto;
 }
 

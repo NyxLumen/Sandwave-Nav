@@ -102,7 +102,6 @@ export class SandwaveNav {
     this._dirTarget = 1
     this.trigger?.setAttribute('aria-expanded', 'true')
     document.body.classList.add('is-nav-open')
-    this.layer.classList.add('is-open')
     this._setPageInert(true)
     this._lock()
 
@@ -299,6 +298,9 @@ export class SandwaveNav {
 
     this.layer.classList.toggle('is-solid', this._fallback)
 
+    // Render time 0 so initial transforms and opacities are applied
+    this._timeline.render(0, true)
+
     this._timeline.eventCallback('onReverseComplete', () => {
       this._started = false
       this._teardown()
@@ -408,6 +410,7 @@ export class SandwaveNav {
     this.renderer?.render(this.state)
     this._showCanvas()
     this._startLoop()
+    this.layer.classList.add('is-open')
     this._timeline.play()
 
     // Focus moves into the nav; the page behind is inert, so Tab cycles

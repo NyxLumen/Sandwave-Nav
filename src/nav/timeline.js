@@ -133,6 +133,7 @@ export function buildWaveTimeline(state, targets) {
     0,
   )
   tl.set([targets.eyebrow, targets.foot], { opacity: 0, y: 12 }, 0)
+  tl.set(targets.layer, { autoAlpha: 0 }, 0)
   if (targets.veil) {
     tl.set(targets.veil, { opacity: 1 }, 0)
     tl.to(targets.veil, { opacity: 0, duration: T.darkRamp, ease: 'power2.out' }, 0.04)
@@ -159,6 +160,13 @@ export function buildWaveTimeline(state, targets) {
   )
 
   // --- typography ----------------------------------------------------------
+  // Reveal nav layer seamlessly as the wave crest reaches typography position
+  tl.to(
+    targets.layer,
+    { autoAlpha: 1, duration: 0.15, ease: 'power2.out' },
+    Math.max(0, T.navStart - 0.15),
+  )
+
   // Timed so the items land just as the crest reaches the left edge, rather
   // than after a dead beat.
   tl.to(
@@ -216,8 +224,8 @@ export function buildReducedTimeline(targets) {
 
   tl.fromTo(
     targets.layer,
-    { opacity: 0 },
-    { opacity: 1, duration: T.duration, ease: 'power2.out' },
+    { autoAlpha: 0 },
+    { autoAlpha: 1, duration: T.duration, ease: 'power2.out' },
     0,
   )
   tl.set(
