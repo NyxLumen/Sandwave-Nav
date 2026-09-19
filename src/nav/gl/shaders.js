@@ -134,13 +134,21 @@ void main() {
   disp.x += band * (fine - 0.5) * 0.55 * amp;
   disp.y += band * (vnoise(vec2(vUv.x * 34.0, uTime * 1.10)) - 0.5) * 0.55 * amp;
 
-  vec2 uv = clamp(vUv + disp, vec2(0.0), vec2(1.0));
+  // Ambient fluid motion for the settled/open state:
+  // Gives the darkened background page a subtle living breath and organic dune drift
+  float ambientWave = sin(vUv.y * 3.2 + uTime * 0.35) * cos(vUv.x * 2.8 - uTime * 0.25);
+  vec2 ambientDisp = vec2(
+    ambientWave * 0.0035 + (fbm(vec2(vUv.x * 2.0 + uTime * 0.04, vUv.y * 3.0)) - 0.5) * 0.004,
+    cos(vUv.x * 3.5 + uTime * 0.3) * 0.002
+  ) * swept * uDark;
+
+  vec2 uv = clamp(vUv + disp + ambientDisp, vec2(0.0), vec2(1.0));
 
   // --- sample, with a trace of chromatic separation at the crest -----------
   // Kept very low. The text on this site is near-black on near-white, which is
   // the worst case for a split: past roughly 0.0006 the fringing stops reading
   // as refraction through a wave and starts reading as anaglyph glasses.
-  float ca = band * 0.00045 * uIntensity;
+  float ca = (band * 0.00045 * uIntensity) + (swept * uDark * 0.00015 * sin(uTime * 0.5 + vUv.y * 4.0));
   vec3 col;
   col.r = texture2D(uTex, clamp(uv + vec2(ca, 0.0), vec2(0.0), vec2(1.0))).r;
   col.g = texture2D(uTex, uv).g;
@@ -158,12 +166,22 @@ void main() {
   vec3 night = vec3(0.043, 0.039, 0.035);
   col = mix(col, night, darkAmt);
 
-  // --- sand ----------------------------------------------------------------
-  vec2 gUv = vUv * uRes / 220.0;
-  float g = texture2D(uGrain, gUv).r;
+  // --- living sand atmosphere ----------------------------------------------
+  // Dynamic multi-scale grain with slow ambient drift
+  vec2 gUv1 = (vUv * uRes / 220.0) + vec2(uTime * 0.012, uTime * 0.006);
+  vec2 gUv2 = (vUv * uRes / 160.0) + vec2(-uTime * 0.008, uTime * 0.015);
+  float g1 = texture2D(uGrain, gUv1).r;
+  float g2 = texture2D(uGrain, gUv2).r;
+  float g = mix(g1, g2, 0.5 + 0.5 * sin(uTime * 0.8 + vUv.y * 3.0));
   col += (g - 0.5) * uGrainAmt * (0.18 + 0.82 * swept);
 
-  // Streaks drawn out along the direction of travel.
+  // Ambient dune wind currents drifting across the darkness
+  float duneBreeze = fbm(vec2(vUv.x * 2.4 - uTime * 0.06, vUv.y * 3.8 + uTime * 0.03));
+  float microCurrent = sin(vUv.x * 12.0 + vUv.y * 8.0 - uTime * 0.7) * 0.015;
+  col += (duneBreeze - 0.5) * 0.045 * swept * uDark;
+  col += vec3(0.08, 0.045, 0.02) * (duneBreeze * 0.06 + microCurrent) * swept * uDark;
+
+  // Streaks drawn out along the direction of travel during crest.
   float streak = fbm(vec2(vUv.x * 2.2 + uTime * 0.55, vUv.y * 22.0));
   col += band * (streak - 0.5) * 0.075 * uIntensity;
 
@@ -173,10 +191,10 @@ void main() {
   float lip = exp(-pow((t - 0.008) / 0.017, 2.0));
   col += lip * 0.05 * uIntensity * vec3(1.0, 0.92, 0.82);
 
-  // --- vignette ------------------------------------------------------------
+  // --- vignette with subtle organic breathing ------------------------------
   vec2 p = vUv - 0.5;
   p.x *= uRes.x / max(uRes.y, 1.0);
-  float vig = 1.0 - dot(p, p) * 0.34;
+  float vig = 1.0 - dot(p, p) * (0.34 + 0.03 * sin(uTime * 0.45));
   col *= mix(1.0, vig, 0.25 + 0.75 * swept);
 
   gl_FragColor = vec4(col, 1.0);
