@@ -6,43 +6,43 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 html {
-  -webkit-text-size-adjust: 100%;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+	-webkit-text-size-adjust: 100%;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
 }
 
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
+	width: 0;
+	height: 0;
+	display: none;
 }
 
 body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font-sans);
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+	margin: 0;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-sans);
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	overflow-x: hidden;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
 }
 /* Scroll lock while the wave is open. Compensated for scrollbar width in JS
    so the page does not reflow. */
 body.is-locked {
-  position: fixed;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
+	position: fixed;
+	left: 0;
+	width: 100%;
+	overflow: hidden;
 }
 
 h1,
@@ -50,40 +50,40 @@ h2,
 h3,
 p,
 ul {
-  margin: 0;
+	margin: 0;
 }
 
 ul {
-  padding: 0;
-  list-style: none;
+	padding: 0;
+	list-style: none;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 #page {
-  position: relative;
-  min-height: 100vh;
-  /* No padding-top: the hero fills the full viewport including behind the
+	position: relative;
+	min-height: 100vh;
+	/* No padding-top: the hero fills the full viewport including behind the
      fixed masthead. The masthead floats over it. Sections below the hero
      have their own backgrounds (see .statement, .work, .footer). */
-  /* No background here — the hero carries the image; below-hero sections
+	/* No background here — the hero carries the image; below-hero sections
      carry their own paper. A background on #page would paint over the hero
      via stacking-context rules (child negative z-index goes behind ancestor
      background paint, not below the ancestor itself). */
-  background: transparent;
+	background: transparent;
 }
 
 /* --- shared ---------------------------------------------------------------- */
 
 .eyebrow {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--muted);
 }
 
 /* --- masthead -------------------------------------------------------------- */
@@ -99,143 +99,145 @@ a {
    and blur so html2canvas captures it. ::before/::after pseudo-elements are
    not captured by html2canvas, so essential visual layers must be real nodes. */
 .masthead {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 60;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 18px var(--gutter);
-  color: #f1ebe2;
-  background: transparent;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 60;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 18px var(--gutter);
+	color: #f1ebe2;
+	background: transparent;
 }
 
 /* Real DOM element: top-edge atmospheric gradient + subtle blur.
    Covers from top of viewport down ~180px, black → transparent.
    Must be a real element (not ::before) so html2canvas captures it. */
 .masthead__veil {
-  position: absolute;
-  inset: 0;
-  /* Extend 180px below the masthead's own 62px height */
-  height: 180px;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.52) 0%,
-    rgba(0, 0, 0, 0.30) 35%,
-    rgba(0, 0, 0, 0.10) 65%,
-    rgba(0, 0, 0, 0)    100%
-  );
-  /* Blur only within this element — disappears as the gradient fades.
+	position: absolute;
+	inset: 0;
+	/* Extend 180px below the masthead's own 62px height */
+	height: 180px;
+	background: linear-gradient(
+		to bottom,
+		rgba(0, 0, 0, 0.52) 0%,
+		rgba(0, 0, 0, 0.3) 35%,
+		rgba(0, 0, 0, 0.1) 65%,
+		rgba(0, 0, 0, 0) 100%
+	);
+	/* Blur only within this element — disappears as the gradient fades.
      No border, no card, no visible rectangle. */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  /* Mask so the blur fades out with the gradient rather than cutting off */
-  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-  z-index: -1;
-  pointer-events: none;
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	/* Mask so the blur fades out with the gradient rather than cutting off */
+	-webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+	mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+	z-index: -1;
+	pointer-events: none;
 }
 
 .masthead.is-scrolled {
-  color: var(--ink);
+	color: var(--ink);
 }
 
 .wordmark {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 0.01em;
 }
 
 .wordmark__mark {
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: var(--accent);
+	width: 13px;
+	height: 13px;
+	border-radius: 50%;
+	background: var(--accent);
 }
 
 /* --- the "+" trigger ------------------------------------------------------- */
 
 .nav-trigger {
-  position: relative;
-  z-index: 60;
-  display: inline-flex;
-  align-items: center;
-  flex: none;
-  height: 44px;
-  /* Sized by its content at rest; the component measures this and pins an
+	position: relative;
+	z-index: 60;
+	display: inline-flex;
+	align-items: center;
+	flex: none;
+	height: 44px;
+	/* Sized by its content at rest; the component measures this and pins an
      explicit width so GSAP can tween it down to a circle. */
-  width: auto;
-  padding: 0;
-  border: 0;
-  border-radius: 999px;
-  background: var(--ink);
-  color: var(--paper);
-  font: inherit;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  overflow: hidden;
-  white-space: nowrap;
-  -webkit-tap-highlight-color: transparent;
-  transition: background-color 0.35s var(--ease-out-expo), color 0.35s var(--ease-out-expo);
+	width: auto;
+	padding: 0;
+	border: 0;
+	border-radius: 999px;
+	background: var(--ink);
+	color: var(--paper);
+	font: inherit;
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	cursor: pointer;
+	overflow: hidden;
+	white-space: nowrap;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		background-color 0.35s var(--ease-out-expo),
+		color 0.35s var(--ease-out-expo);
 }
 
 .nav-trigger:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+	outline: 2px solid var(--accent);
+	outline-offset: 3px;
 }
 
 .nav-trigger__label {
-  /* flex:none so it keeps its intrinsic width while the button clips it —
+	/* flex:none so it keeps its intrinsic width while the button clips it —
      that is what lets the component measure the resting size at any time. */
-  flex: none;
-  padding: 0 40px 0 20px;
-  pointer-events: none;
+	flex: none;
+	padding: 0 40px 0 20px;
+	pointer-events: none;
 }
 
 .nav-trigger__icon {
-  position: absolute;
-  top: 50%;
-  right: 14px;
-  width: 16px;
-  height: 16px;
-  margin-top: -8px;
-  display: block;
-  pointer-events: none;
+	position: absolute;
+	top: 50%;
+	right: 14px;
+	width: 16px;
+	height: 16px;
+	margin-top: -8px;
+	display: block;
+	pointer-events: none;
 }
 
 .nav-trigger__icon svg {
-  display: block;
-  width: 100%;
-  height: 100%;
+	display: block;
+	width: 100%;
+	height: 100%;
 }
 
 /* Open state — set by the component, drives the pill → circle morph. */
 body.is-nav-open .nav-trigger {
-  background: var(--night-ink);
-  color: var(--night);
+	background: var(--night-ink);
+	color: var(--night);
 }
 
 /* --- hero ------------------------------------------------------------------ */
 
 .hero {
-  position: relative;
-  /* Full viewport height from the very top of the window */
-  min-height: 100vh;
-  /* Balanced padding so content fits inside 100vh without overflow stretching */
-  padding: clamp(80px, 12vh, 120px) var(--gutter) clamp(40px, 8vh, 80px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
+	position: relative;
+	/* Full viewport height from the very top of the window */
+	min-height: 100vh;
+	/* Balanced padding so content fits inside 100vh without overflow stretching */
+	padding: clamp(80px, 12vh, 120px) var(--gutter) clamp(40px, 8vh, 80px);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	overflow: hidden;
 }
 
 /* Hero background — real DOM element with CSS background-image.
@@ -243,94 +245,94 @@ body.is-nav-open .nav-trigger {
    center, rendering the exact same pixel-for-pixel scale, aspect ratio, and
    center crop as the live browser. */
 .hero__bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/assets/dune-crfree.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 0;
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url("/assets/dune-crfree.png");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	z-index: 0;
 }
 
 /* Subtle dark gradient for text readability — sits above the image. */
 .hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(11, 10, 9, 0.35) 0%,
-    rgba(11, 10, 9, 0.18) 40%,
-    rgba(11, 10, 9, 0.08) 70%,
-    rgba(11, 10, 9, 0)    100%
-  );
-  z-index: 1;
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		135deg,
+		rgba(11, 10, 9, 0.35) 0%,
+		rgba(11, 10, 9, 0.18) 40%,
+		rgba(11, 10, 9, 0.08) 70%,
+		rgba(11, 10, 9, 0) 100%
+	);
+	z-index: 1;
 }
 
 /* Content wrapper sits above both the image and the overlay. */
 .hero__content {
-  position: relative;
-  z-index: 2;
+	position: relative;
+	z-index: 2;
 }
 
 .hero__title {
-  position: relative;
-  margin-top: clamp(24px, 5vh, 56px);
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(52px, 12.5vw, 190px);
-  line-height: 0.88;
-  letter-spacing: -0.02em;
-  color: #f1ebe2;
-  text-shadow: 0 2px 12px rgba(11, 10, 9, 0.4);
+	position: relative;
+	margin-top: clamp(24px, 5vh, 56px);
+	font-family: var(--font-serif);
+	font-weight: 400;
+	font-size: clamp(52px, 12.5vw, 190px);
+	line-height: 0.88;
+	letter-spacing: -0.02em;
+	color: #f1ebe2;
+	text-shadow: 0 2px 12px rgba(11, 10, 9, 0.4);
 }
 
 .hero__line {
-  display: block;
+	display: block;
 }
 
 .hero__line--indent {
-  padding-left: clamp(20px, 12vw, 200px);
+	padding-left: clamp(20px, 12vw, 200px);
 }
 
 .hero__title em {
-  font-style: italic;
-  color: #d9764a;
+	font-style: italic;
+	color: #d9764a;
 }
 
 .hero__meta {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 32px;
-  margin-top: clamp(36px, 7vh, 88px);
-  padding-top: 20px;
-  border-top: 1px solid var(--rule);
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 32px;
+	margin-top: clamp(36px, 7vh, 88px);
+	padding-top: 20px;
+	border-top: 1px solid var(--rule);
 }
 
 .lede {
-  position: relative;
-  max-width: 34ch;
-  font-size: clamp(15px, 1.5vw, 18px);
-  line-height: 1.45;
-  color: #e8e0d4;
+	position: relative;
+	max-width: 34ch;
+	font-size: clamp(15px, 1.5vw, 18px);
+	line-height: 1.45;
+	color: #e8e0d4;
 }
 
 /* The wordmark and trigger over the hero desert need light colours.
    Only apply inside .hero to avoid bleed into other sections. */
 .hero .eyebrow {
-  color: rgba(241, 235, 226, 0.7);
+	color: rgba(241, 235, 226, 0.7);
 }
 
 .hero__scroll {
-  position: relative;
-  flex: none;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(241, 235, 226, 0.55);
+	position: relative;
+	flex: none;
+	font-size: 11px;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: rgba(241, 235, 226, 0.55);
 }
 
 /* --- statement ------------------------------------------------------------- */
@@ -338,157 +340,157 @@ body.is-nav-open .nav-trigger {
 /* Non-hero sections carry their own paper background now that #page is
    transparent (required so the hero desert image is not painted over). */
 .statement {
-  padding: clamp(56px, 12vh, 150px) var(--gutter);
-  border-top: 1px solid var(--rule);
-  background: var(--paper);
+	padding: clamp(56px, 12vh, 150px) var(--gutter);
+	border-top: 1px solid var(--rule);
+	background: var(--paper);
 }
 
 .statement__body {
-  max-width: 22ch;
-  margin-top: 28px;
-  font-family: var(--font-serif);
-  font-size: clamp(28px, 4.6vw, 66px);
-  line-height: 1.06;
-  letter-spacing: -0.015em;
+	max-width: 22ch;
+	margin-top: 28px;
+	font-family: var(--font-serif);
+	font-size: clamp(28px, 4.6vw, 66px);
+	line-height: 1.06;
+	letter-spacing: -0.015em;
 }
 
 .statement__body em {
-  font-style: italic;
-  color: var(--accent);
+	font-style: italic;
+	color: var(--accent);
 }
 
 /* --- work ------------------------------------------------------------------ */
 
 .work {
-  padding: clamp(40px, 8vh, 90px) var(--gutter) clamp(56px, 10vh, 120px);
-  border-top: 1px solid var(--rule);
-  background: var(--paper);
+	padding: clamp(40px, 8vh, 90px) var(--gutter) clamp(56px, 10vh, 120px);
+	border-top: 1px solid var(--rule);
+	background: var(--paper);
 }
 
 .section-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 28px;
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 16px;
+	margin-bottom: 28px;
 }
 
 .work__row {
-  display: grid;
-  grid-template-columns: 48px 1fr auto 64px;
-  align-items: baseline;
-  gap: 16px;
-  padding: clamp(16px, 2.4vh, 26px) 0;
-  border-top: 1px solid var(--rule);
+	display: grid;
+	grid-template-columns: 48px 1fr auto 64px;
+	align-items: baseline;
+	gap: 16px;
+	padding: clamp(16px, 2.4vh, 26px) 0;
+	border-top: 1px solid var(--rule);
 }
 
 .work__row:last-child {
-  border-bottom: 1px solid var(--rule);
+	border-bottom: 1px solid var(--rule);
 }
 
 .work__index,
 .work__tag,
 .work__year {
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  color: var(--muted);
+	font-size: 12px;
+	letter-spacing: 0.06em;
+	color: var(--muted);
 }
 
 .work__year {
-  text-align: right;
+	text-align: right;
 }
 
 .work__title {
-  font-family: var(--font-serif);
-  font-size: clamp(26px, 4.4vw, 60px);
-  line-height: 1;
-  letter-spacing: -0.015em;
+	font-family: var(--font-serif);
+	font-size: clamp(26px, 4.4vw, 60px);
+	line-height: 1;
+	letter-spacing: -0.015em;
 }
 
 /* --- strip ----------------------------------------------------------------- */
 
 .strip {
-  overflow: hidden;
-  padding: clamp(28px, 5vh, 52px) 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  background: #e8e1d8;
+	overflow: hidden;
+	padding: clamp(28px, 5vh, 52px) 0;
+	border-top: 1px solid var(--rule);
+	border-bottom: 1px solid var(--rule);
+	background: #e8e1d8;
 }
 
 .strip__track {
-  display: flex;
-  gap: 28px;
-  align-items: baseline;
-  font-family: var(--font-serif);
-  font-size: clamp(28px, 5vw, 64px);
-  font-style: italic;
-  line-height: 1;
-  color: var(--ink);
-  white-space: nowrap;
-  animation: strip-drift 28s linear infinite;
+	display: flex;
+	gap: 28px;
+	align-items: baseline;
+	font-family: var(--font-serif);
+	font-size: clamp(28px, 5vw, 64px);
+	font-style: italic;
+	line-height: 1;
+	color: var(--ink);
+	white-space: nowrap;
+	animation: strip-drift 28s linear infinite;
 }
 
-.strip__track span[aria-hidden='true'] {
-  color: var(--accent);
+.strip__track span[aria-hidden="true"] {
+	color: var(--accent);
 }
 
 @keyframes strip-drift {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+	to {
+		transform: translate3d(-50%, 0, 0);
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .strip__track {
-    animation: none;
-  }
+	.strip__track {
+		animation: none;
+	}
 }
 
 /* --- footer ---------------------------------------------------------------- */
 
 .footer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  padding: clamp(40px, 8vh, 90px) var(--gutter) clamp(48px, 9vh, 110px);
-  background: var(--paper);
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 32px;
+	padding: clamp(40px, 8vh, 90px) var(--gutter) clamp(48px, 9vh, 110px);
+	background: var(--paper);
 }
 
 .footer__col p + p {
-  margin-top: 10px;
+	margin-top: 10px;
 }
 
 .footer__col .eyebrow {
-  margin-bottom: 14px;
+	margin-bottom: 14px;
 }
 
 .footer__col p:not(.eyebrow) {
-  font-size: 15px;
-  color: var(--ink-soft);
+	font-size: 15px;
+	color: var(--ink-soft);
 }
 
 /* --- responsive ------------------------------------------------------------ */
 
 @media (max-width: 760px) {
-  .hero__meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
+	.hero__meta {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
+	}
 
-  .work__row {
-    grid-template-columns: 36px 1fr auto;
-  }
+	.work__row {
+		grid-template-columns: 36px 1fr auto;
+	}
 
-  .work__tag {
-    display: none;
-  }
+	.work__tag {
+		display: none;
+	}
 
-  .footer {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
+	.footer {
+		grid-template-columns: 1fr;
+		gap: 28px;
+	}
 }
